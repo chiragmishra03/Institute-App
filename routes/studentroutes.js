@@ -1,7 +1,18 @@
 const express = require("express");
 const router = express.Router();
 const Student = require("../models/studentmodel.js");
-const { verifyToken, verifyPrivilege } = require("../utils/VerifyToken.js");
+const { verifyToken, verifyAdmin } = require("../utils/VerifyToken.js");
+
+router.get("/get-all-students", verifyAdmin, async (req, res) => {
+  try {
+    const students = await Student.find({});
+    return await res.json({ students: students });
+  } catch (error) {
+    console.log(error);
+    return res.json({ message: "cannot be fetched rn" });
+  }
+});
+
 router.get("/profile/:id", verifyToken, async (req, res) => {
   try {
     const student = await Student.findById(req.params.id).select(

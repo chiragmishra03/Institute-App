@@ -3,7 +3,15 @@ const Course = require("../models/coursemodel.js");
 const Teacher = require("../models/teachermodel.js");
 const jwt = require("jsonwebtoken");
 const { verifyToken, verifyPrivilege } = require("../utils/VerifyToken.js");
-
+router.get("/get-all-courses", async (req, res) => {
+  try {
+    const courses = await Course.find({});
+    return await res.json({ courses: courses });
+  } catch (error) {
+    console.log(error);
+    return res.json({ message: "cannot be fetched rn" });
+  }
+});
 router.get("/get-course/:id", verifyToken, async (req, res) => {
   const courseId = req.params.id;
   try {
